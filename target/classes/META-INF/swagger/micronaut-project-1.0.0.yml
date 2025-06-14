@@ -61,16 +61,34 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Product"
-  /hello:
-    get:
-      operationId: helloworld
+  /auth/login:
+    post:
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+        required: true
       responses:
         "200":
-          description: helloworld 200 response
+          description: login 200 response
           content:
-            text/plain:
+            application/json:
+              schema:
+                type: object
+  /hello:
+    get:
+      operationId: helloWorld
+      responses:
+        "200":
+          description: helloWorld 200 response
+          content:
+            application/json:
               schema:
                 type: string
+      security:
+      - Authorization: []
   /products:
     get:
       operationId: getproducts
@@ -152,7 +170,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/User"
+              $ref: "#/components/schemas/UserModel"
         required: true
       responses:
         "200":
@@ -160,9 +178,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
+                $ref: "#/components/schemas/UserModel"
 components:
   schemas:
+    LoginRequest:
+      required:
+      - password
+      - username
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
     Product:
       required:
       - id
@@ -193,7 +221,7 @@ components:
           type: string
         type:
           $ref: "#/components/schemas/Product.Type"
-    User:
+    UserModel:
       required:
       - email
       - firstName
@@ -204,6 +232,8 @@ components:
           maxLength: 10
           minLength: 3
           type: string
+          example: John
+          x-size-message: First name must not be blank
         lastName:
           maxLength: 10
           minLength: 3
@@ -214,3 +244,8 @@ components:
           format: email
         id:
           type: string
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

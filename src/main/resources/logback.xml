@@ -9,6 +9,10 @@
     </appender>
     <logger name="com.micronautlearning" level="debug"/>
     <logger name="io.micronaut.context" level="info"/>
+    <logger name="org.flywaydb.core" level="debug"/>
+    <logger name="io.micronaut.flyway" level="debug"/>
+    <logger name="io.micronaut.data.query" level="debug"/>
+    <logger name="io.hibernate.SQL" level="debug"/>
     <root level="info">
         <appender-ref ref="STDOUT" />
     </root>

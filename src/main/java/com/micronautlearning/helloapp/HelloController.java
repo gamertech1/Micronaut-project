@@ -3,8 +3,10 @@ package com.micronautlearning.helloapp;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
+import io.micronaut.security.annotation.Secured;
+import io.micronaut.security.rules.SecurityRule;
 import jakarta.inject.Inject;
-
+@Secured(SecurityRule.IS_AUTHENTICATED)
 @Controller("/hello")
 public class HelloController {
 
@@ -16,8 +18,9 @@ public class HelloController {
     }
 
 
-    @Get(produces = MediaType.TEXT_PLAIN)
-    public String helloworld(){
+    @Get(produces = MediaType.APPLICATION_JSON)
+    public String helloWorld(){
         return helloMessage.message();
     }
+
 }
