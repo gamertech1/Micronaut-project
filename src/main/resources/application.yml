@@ -33,6 +33,12 @@ micronaut:
       - pattern: /auth/login
         http-method: POST
         access: isAnonymous()
+      - pattern: /swagger/**
+        access: isAnonymous()
+      - pattern: /openapi-explorer/**
+        access: isAnonymous()
+      - pattern: /favicon.ico
+        access: isAnonymous()
 my:
   api:
     version: 1.0.0

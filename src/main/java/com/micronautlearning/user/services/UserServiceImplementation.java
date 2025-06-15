@@ -22,18 +22,22 @@ public class UserServiceImplementation  implements UserService{
     }
 
     public UserModel createUser(UserModel userModel) {
-        if (userModel.getId() == null) {
-            userModel.setId(UUID.randomUUID().toString());
+        if (userModel.getUid() == null) {
+            userModel.setUid(UUID.randomUUID().toString());
         }
 
         return userRepository.save(userModel); // 🚀 This saves to the database
     }
     public UserModel updateUser(String id, UpdateUserDetail request) {
-        UserModel user = userRepository.findById(id).orElseThrow(() -> new HttpStatusException(HttpStatus.BAD_REQUEST, "User with ID " + id + " not found"));;
+        UserModel user = userRepository.findByUid(id).orElseThrow(() -> new HttpStatusException(HttpStatus.BAD_REQUEST, "User with ID " + id + " not found"));;
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
         user.setEmail(request.getEmail());
         return userRepository.update(user); // 🚀 This update to the database
+    }
+    public UserModel getUser(String id) {
+        return userRepository.findByUid(id)
+                .orElseThrow(() -> new HttpStatusException(HttpStatus.BAD_REQUEST, "User with ID " + id + " not found"));
     }
 }
 

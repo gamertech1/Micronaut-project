@@ -39,30 +39,35 @@ public class UserModel {
     @Size(min = 3, max = 10)
     @NotBlank
     @Column(nullable = false, length = 25, name = "last_name")
+    @Schema(example = "Doe")
     private String lastName;
 
     @Email
     @NotBlank
     @Column(unique = true, nullable = false, name = "email")
+    @Schema(example = "Johndoe123@gmail.com")
     private String email;
 
 //    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
-    private String id;
+    @Column(name = "uid")
+    @Schema(hidden = true)
+    private String uid;
+
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // or SEQUENCE
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Schema(hidden = true)// or SEQUENCE
     private Integer userCount;
 
 
     public UserModel() {}
 
     public UserModel(String firstName, String lastName, String email, String
-            id,Integer userCount) {
+            uid,Integer userCount) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.id = id;
+        this.uid = uid;
         this.userCount = userCount;
     }
 
@@ -75,8 +80,8 @@ public class UserModel {
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
+    public String getUid() { return uid; }
+    public void setUid(String uid) { this.uid = uid; }
 
     public Integer getUserCount() {
         return userCount;

@@ -1,14 +1,6 @@
 package com.micronautlearning.user.model;
 
 import io.micronaut.serde.annotation.Serdeable;
-import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 
 @Serdeable
 public class UserResponseDTO {
@@ -16,13 +8,13 @@ public class UserResponseDTO {
     private String firstName;
     private String lastName;
     private String email;
-    private String id;
+    private String uid;
 
-    public UserResponseDTO(String firstName, String lastName, String email, String id) {
+    public UserResponseDTO(String firstName, String lastName, String email, String uid) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.id = id;
+        this.uid = uid;
     }
 
     public String getFirstName() {
@@ -49,11 +41,19 @@ public class UserResponseDTO {
         this.email = email;
     }
 
-    public String getId() {
-        return id;
+    public String getUid() {
+        return uid;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+    public static UserResponseDTO from (UserModel user) {
+        return new UserResponseDTO(
+                user.getFirstName(),
+                user.getLastName(),
+                user.getEmail(),
+                user.getUid()
+        );
     }
 }
