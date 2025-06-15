@@ -24,6 +24,10 @@ import java.util.UUID;
 @Access(AccessType.FIELD)
 @Serdeable
 @Introspected
+//@Getter
+//@Setter
+//@AllArgsConstructor
+//@NoArgsConstructor
 public class UserModel {
 
     @NotBlank(message = "First name must not be blank")
@@ -42,19 +46,24 @@ public class UserModel {
     @Column(unique = true, nullable = false, name = "email")
     private String email;
 
-    @Id
 //    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private String id;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // or SEQUENCE
+    private Integer userCount;
+
+
     public UserModel() {}
 
     public UserModel(String firstName, String lastName, String email, String
-            id) {
+            id,Integer userCount) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.id = id;
+        this.userCount = userCount;
     }
 
     public String getFirstName() { return firstName; }
@@ -69,8 +78,15 @@ public class UserModel {
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 
+    public Integer getUserCount() {
+        return userCount;
+    }
+
+    public void setUserCount(Integer userCount) {
+        this.userCount = userCount;
+    }
     public static void main(String[] args) {
-        UserModel userData = new UserModel("", "", "my", UUID.randomUUID().toString());
+        UserModel userData = new UserModel("", "", "my", UUID.randomUUID().toString(),22);
 
         ValidatorFactory factory = Validation.byDefaultProvider()
                 .configure()

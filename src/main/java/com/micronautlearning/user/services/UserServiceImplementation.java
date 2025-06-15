@@ -1,8 +1,12 @@
 package com.micronautlearning.user.services;
 
 import com.micronautlearning.user.data.UserRepository;
+import com.micronautlearning.user.model.UpdateUserDetail;
 import com.micronautlearning.user.model.UserModel;
 
+import io.micronaut.http.HttpResponse;
+import io.micronaut.http.HttpStatus;
+import io.micronaut.http.exceptions.HttpStatusException;
 import jakarta.inject.Singleton;
 import jakarta.transaction.Transactional;
 
@@ -23,6 +27,13 @@ public class UserServiceImplementation  implements UserService{
         }
 
         return userRepository.save(userModel); // 🚀 This saves to the database
+    }
+    public UserModel updateUser(String id, UpdateUserDetail request) {
+        UserModel user = userRepository.findById(id).orElseThrow(() -> new HttpStatusException(HttpStatus.BAD_REQUEST, "User with ID " + id + " not found"));;
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+        user.setEmail(request.getEmail());
+        return userRepository.update(user); // 🚀 This update to the database
     }
 }
 

@@ -40,7 +40,7 @@ class UserIntegrationTest {
     @Test
     @Order(1)
     void testUserCreationAndStorage() {
-        UserModel newUser = new UserModel("John","Doe","test@test.com","2345d5y354dcve5r");
+        UserModel newUser = new UserModel("John","Doe","test@test.com","2345d5y354dcve5r",37);
         HttpRequest<UserModel> request = HttpRequest.POST("/users", newUser);
         HttpResponse<UserModel> response = client.toBlocking().exchange(request, UserModel.class);
 

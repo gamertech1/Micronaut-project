@@ -71,5 +71,5 @@ jpa:
     properties:
       hibernate:
         hbm2ddl:
-          auto: update  # or create-drop (for dev only)
+          auto: create  # or create-drop (for dev only)
         dialect: org.hibernate.dialect.PostgreSQLDialect

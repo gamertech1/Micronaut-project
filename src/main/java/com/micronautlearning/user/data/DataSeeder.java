@@ -16,7 +16,7 @@ public class DataSeeder {
 
     @PostConstruct
     void init() {
-        userRepository.save(new UserModel("John", "Doe", "john@example.com",UUID.randomUUID().toString()));
+        userRepository.save(new UserModel("John", "Doe", "john@example.com",UUID.randomUUID().toString(),1));
     }
 }
 

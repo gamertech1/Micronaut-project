@@ -31,10 +31,10 @@ class UserControllerTest {
     @Inject
     @Client("/")
     HttpClient client;
-
+    Integer userCount = 50;
     @Test
     void test_userController_to_create_user(){
-        var userData = new UserModel("Hello","World","my@test.com", UUID.randomUUID().toString());
+        var userData = new UserModel("Hello","World","my@test.com", UUID.randomUUID().toString(),userCount++);
         when(userService.createUser(any(UserModel.class))).thenReturn(userData);
         HttpResponse<UserModel> response = client.toBlocking().exchange(HttpRequest.POST("/users",userData), UserModel.class);
         UserModel myBody = response.getBody()
@@ -46,7 +46,7 @@ class UserControllerTest {
     }
     @Test
     void test_userController_firstName_blank(){
-        var userData = new UserModel("","World","my@test.com", UUID.randomUUID().toString());
+        var userData = new UserModel("","World","my@test.com", UUID.randomUUID().toString(),userCount++);
         HttpClientResponseException exception = assertThrows(HttpClientResponseException.class, () -> {
             client.toBlocking().exchange(HttpRequest.POST("/users", userData), UserModel.class);
         });
