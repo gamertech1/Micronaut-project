@@ -2,6 +2,7 @@ package com.micronautlearning.user.controller;
 
 import java.util.UUID;
 
+import com.micronautlearning.user.model.NewUserModel;
 import com.micronautlearning.user.model.UpdateUserDetail;
 import com.micronautlearning.user.model.UserModel;
 import com.micronautlearning.user.model.UserResponseDTO;
@@ -20,7 +21,7 @@ import jakarta.validation.Valid;
 import org.jsoup.Connection;
 
 @Validated
-@Secured(SecurityRule.IS_ANONYMOUS)
+@Secured(SecurityRule.IS_AUTHENTICATED)
 @Controller("/users")
 public class UserController {
 
@@ -59,5 +60,19 @@ public class UserController {
         UserModel user = userServiceImplementation.getUser(id);
         return HttpResponse.ok(UserResponseDTO.from(user));
     }
+
+    @Delete("/{id}")
+    public HttpResponse<UserResponseDTO> deleteUserDetails(@PathVariable String id){
+        UserModel user = userServiceImplementation.deleteUser(id);
+        return HttpResponse.ok();
+    }
+
+    @Secured(SecurityRule.IS_ANONYMOUS)
+    @Post("/newaccount")
+    public HttpResponse<?> addNewUserDetails(@Body @Valid NewUserModel newUserModel){
+        NewUserModel user = userServiceImplementation.createNewUser(newUserModel);
+        return HttpResponse.ok();
+    }
+
 
 }

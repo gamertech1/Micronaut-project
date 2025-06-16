@@ -46,6 +46,6 @@ class UserIntegrationTest {
 
         Assertions.assertEquals(HttpStatus.CREATED, response.getStatus());
         Assertions.assertNotNull(response.body());
-        Assertions.assertNotNull(response.body().getId());
+        Assertions.assertNotNull(response.body().getUid());
     }
 }

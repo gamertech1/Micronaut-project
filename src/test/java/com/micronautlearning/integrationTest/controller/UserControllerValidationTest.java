@@ -25,10 +25,9 @@ public class UserControllerValidationTest {
     @Inject
     @Client("/")
     HttpClient client;
-    Integer userCount = 100;
     @Test
     void test_userController_firstName_blank() {
-        UserModel userData = new UserModel("", "", "my", UUID.randomUUID().toString(),userCount++);
+        UserModel userData = new UserModel("", "", "my", UUID.randomUUID().toString(),null);
 
         HttpClientResponseException exception = assertThrows(HttpClientResponseException.class, () -> {
             client.toBlocking().retrieve(

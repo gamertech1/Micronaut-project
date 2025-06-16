@@ -90,24 +90,24 @@ public class UserModel {
     public void setUserCount(Integer userCount) {
         this.userCount = userCount;
     }
-    public static void main(String[] args) {
-        UserModel userData = new UserModel("", "", "my", UUID.randomUUID().toString(),22);
-
-        ValidatorFactory factory = Validation.byDefaultProvider()
-                .configure()
-                .messageInterpolator(new ParameterMessageInterpolator())
-                .buildValidatorFactory();
-
-        Validator validator = factory.getValidator();
-
-        Set<ConstraintViolation<UserModel>> violations = validator.validate(userData);
-
-        if (!violations.isEmpty()) {
-            for (ConstraintViolation<UserModel> violation : violations) {
-                System.out.println(violation.getPropertyPath() + " - " + violation.getMessage());
-            }
-        } else {
-            System.out.println("No validation errors.");
-        }
-    }
+//    public static void main(String[] args) {
+//        UserModel userData = new UserModel("", "", "my", UUID.randomUUID().toString(),22);
+//
+//        ValidatorFactory factory = Validation.byDefaultProvider()
+//                .configure()
+//                .messageInterpolator(new ParameterMessageInterpolator())
+//                .buildValidatorFactory();
+//
+//        Validator validator = factory.getValidator();
+//
+//        Set<ConstraintViolation<UserModel>> violations = validator.validate(userData);
+//
+//        if (!violations.isEmpty()) {
+//            for (ConstraintViolation<UserModel> violation : violations) {
+//                System.out.println(violation.getPropertyPath() + " - " + violation.getMessage());
+//            }
+//        } else {
+//            System.out.println("No validation errors.");
+//        }
+//    }
 }

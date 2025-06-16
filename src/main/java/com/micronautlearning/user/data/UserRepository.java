@@ -11,5 +11,6 @@ import java.util.UUID;
 public interface UserRepository extends CrudRepository<UserModel,Integer> {
 //    UserModel save(UserModel userModel);
 Optional<UserModel> findByUid(String uid);
+    void deleteByUid(String uid);
 
 }

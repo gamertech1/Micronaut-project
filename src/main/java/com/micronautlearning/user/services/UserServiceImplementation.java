@@ -1,6 +1,8 @@
 package com.micronautlearning.user.services;
 
+import com.micronautlearning.user.data.NewUserRepository;
 import com.micronautlearning.user.data.UserRepository;
+import com.micronautlearning.user.model.NewUserModel;
 import com.micronautlearning.user.model.UpdateUserDetail;
 import com.micronautlearning.user.model.UserModel;
 
@@ -16,9 +18,11 @@ import java.util.UUID;
 public class UserServiceImplementation  implements UserService{
 
     private final UserRepository userRepository;
+    private final NewUserRepository newUserRepository;
 
-    public UserServiceImplementation(UserRepository userRepository) {
+    public UserServiceImplementation(UserRepository userRepository, NewUserRepository newUserRepository) {
         this.userRepository = userRepository;
+        this.newUserRepository = newUserRepository;
     }
 
     public UserModel createUser(UserModel userModel) {
@@ -38,6 +42,20 @@ public class UserServiceImplementation  implements UserService{
     public UserModel getUser(String id) {
         return userRepository.findByUid(id)
                 .orElseThrow(() -> new HttpStatusException(HttpStatus.BAD_REQUEST, "User with ID " + id + " not found"));
+    }
+    public UserModel deleteUser(String id) {
+        UserModel user = userRepository.findByUid(id)
+                .orElseThrow(() -> new HttpStatusException(HttpStatus.BAD_REQUEST, "User with ID " + id + " not found"));
+
+        userRepository.deleteByUid(id);
+
+        return user;
+    }
+    public NewUserModel createNewUser(NewUserModel userModel) {
+         if (!userModel.getPassword().equals(userModel.getRepeatPassword())){
+             throw new HttpStatusException(HttpStatus.BAD_REQUEST, "Password should match repeatPassword");
+         }
+        return newUserRepository.save(userModel);
     }
 }
 
