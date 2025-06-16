@@ -18,10 +18,18 @@ public class AuthController {
 
     @Inject
     TokenGenerator tokenGenerator;
+    private final AuthService authService;
+
+    public AuthController(AuthService authService) {
+        this.authService = authService;
+    }
 
     @Post("/login")
     public HttpResponse<?> login(@Body LoginRequest loginRequest) {
-        if ("john".equals(loginRequest.username()) && "password".equals(loginRequest.password())) {
+            boolean isAuthenticated = authService.authenticate(loginRequest);
+            if (!isAuthenticated) {
+              return HttpResponse.unauthorized().body("No user found");
+            }
             Map<String, Object> claims = Map.of(
                     "sub", loginRequest.username(),             // subject
                     "roles", java.util.List.of("ROLE_USER"),    // roles
@@ -33,16 +41,15 @@ public class AuthController {
             return token.map(accessToken ->
                     HttpResponse.ok(new BearerAccessRefreshToken(
                             loginRequest.username(),                // username
-                            List.of("ROLE_USER"),                   // roles
+                            List.of("ROLE_USER"),                //roles
                             3600,                                   // expiresIn (Integer)
                             accessToken,                            // accessToken
                             null,                                   // refreshToken (optional)
                             "Bearer"
                     ))
             ).orElse(HttpResponse.serverError());
-
         }
 
-        return HttpResponse.unauthorized().body(Map.of("message","wrong password"));
+
     }
-}
+
