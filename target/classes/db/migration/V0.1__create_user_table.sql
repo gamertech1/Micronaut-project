@@ -1,0 +1,6 @@
+CREATE TABLE  IF NOT EXISTS mn.users (
+    id VARCHAR(15) PRIMARY KEY,
+    first_name VARCHAR(10) NOT NULL,
+    last_name VARCHAR(10) NOT NULL,
+    email VARCHAR(15) NOT NULL UNIQUE
+);

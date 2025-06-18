@@ -1,0 +1,6 @@
+jpa:
+  default:
+    properties:
+      hibernate:
+        hbm2ddl:
+          create_schemas: true
