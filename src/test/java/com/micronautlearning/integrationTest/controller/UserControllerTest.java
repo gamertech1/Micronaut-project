@@ -13,6 +13,7 @@ import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import io.micronaut.test.annotation.MockBean;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
+import net.datafaker.Faker;
 import org.junit.jupiter.api.*;
 
 import java.util.UUID;
@@ -21,8 +22,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import io.micronaut.http.client.annotation.Client;
 
-@MicronautTest
+@MicronautTest()
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class UserControllerTest {
 
 
@@ -38,30 +40,46 @@ class UserControllerTest {
     HttpClient client;
 
     String jwt;
+    Faker faker = new Faker();
 
-    @BeforeAll
-    void authController_to_get_jwtToken(){
-        var authData = new LoginRequest("john","password");
-        HttpResponse<JwtResponseDTO> response = client.toBlocking().exchange(HttpRequest.POST("/auth/login",authData), JwtResponseDTO.class);
-        JwtResponseDTO loginResponse = response.body();
-        assertNotNull(loginResponse.getAccess_token());
-        jwt = loginResponse.getAccess_token();
-    }
-
+     private String getJwt() {
+       var authData = new LoginRequest("JohnCena","12345678");
+            return client.toBlocking()
+            .exchange(HttpRequest.POST("/auth/login", authData), JwtResponseDTO.class)
+            .body().getAccess_token();
+}
     @Test
+    @Order(1)
+    void test_userController_to_give_401_while_create_user() {
+        var userData = new UserModel(faker.name().firstName(), faker.name().lastName(), faker.internet().emailAddress(), UUID.randomUUID().toString(), null);
+        when(userService.createUser(any(UserModel.class))).thenReturn(userData);
+        HttpClientResponseException exception = assertThrows(HttpClientResponseException.class, () -> {
+            client.toBlocking().exchange(HttpRequest.POST("/users", userData).header("Authorization", "Bearer " + jwt),UserModel.class);
+        });
+        assertEquals(HttpStatus.UNAUTHORIZED,exception.getStatus());
+    }
+    @Test
+    @Order(2)
     void test_userController_to_create_user(){
-        var userData = new UserModel("Hello","World","my@test3.com", UUID.randomUUID().toString(),null);
+        String jwt = getJwt();
+        String firstName=faker.name().firstName();
+        String lastName=faker.name().lastName();
+        String email = faker.internet().emailAddress();
+        var userData = new UserModel(firstName, lastName, email, UUID.randomUUID().toString(), null);
         when(userService.createUser(any(UserModel.class))).thenReturn(userData);
         HttpResponse<UserResponseDTO> response = client.toBlocking().exchange(HttpRequest.POST("/users",userData).bearerAuth(jwt), UserResponseDTO.class);
         UserResponseDTO myBody = response.getBody()
           .orElseThrow(() -> new RuntimeException("Response body is empty"));
-        assertEquals("Hello",myBody.getFirstName());
-        assertEquals("World",myBody.getLastName());
-        assertEquals("my@test3.com",myBody.getEmail());
+        assertEquals(firstName,myBody.getFirstName());
+        assertEquals(lastName,myBody.getLastName());
+        assertEquals(email,myBody.getEmail());
         assertNotNull(myBody.getUid());
     }
     @Test
+    @Order(3)
     void test_userController_firstName_blank(){
+        String jwt = getJwt();
+        System.out.println("JWT token: " + jwt);
         var userData = new UserModel("","World","my@test.com", UUID.randomUUID().toString(),null);
         HttpClientResponseException exception = assertThrows(HttpClientResponseException.class, () -> {
             client.toBlocking().exchange(HttpRequest.POST("/users", userData).header("Authorization", "Bearer " + jwt),UserModel.class);

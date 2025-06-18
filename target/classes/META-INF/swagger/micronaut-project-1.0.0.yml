@@ -178,7 +178,84 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UserModel"
+                $ref: "#/components/schemas/UserResponseDTO"
+      security:
+      - Authorization: []
+  /users/newaccount:
+    post:
+      operationId: addNewUserDetails
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewUserModel"
+        required: true
+      responses:
+        "200":
+          description: addNewUserDetails 200 response
+          content:
+            application/json:
+              schema:
+                type: object
+  /users/{id}:
+    get:
+      operationId: getUserDetails
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: getUserDetails 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponseDTO"
+      security:
+      - Authorization: []
+    delete:
+      operationId: deleteUserDetails
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: deleteUserDetails 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponseDTO"
+      security:
+      - Authorization: []
+  /users/{id}/update:
+    put:
+      operationId: updateUserDetails
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateUserDetail"
+        required: true
+      responses:
+        "200":
+          description: updateUserDetails 200 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponseDTO"
+      security:
+      - Authorization: []
 components:
   schemas:
     LoginRequest:
@@ -190,6 +267,24 @@ components:
         username:
           type: string
         password:
+          type: string
+    NewUserModel:
+      required:
+      - password
+      - repeatPassword
+      - userName
+      type: object
+      properties:
+        userName:
+          minLength: 1
+          type: string
+        password:
+          maxLength: 16
+          minLength: 8
+          type: string
+        repeatPassword:
+          maxLength: 16
+          minLength: 8
           type: string
     Product:
       required:
@@ -221,6 +316,15 @@ components:
           type: string
         type:
           $ref: "#/components/schemas/Product.Type"
+    UpdateUserDetail:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
     UserModel:
       required:
       - email
@@ -238,11 +342,27 @@ components:
           maxLength: 10
           minLength: 3
           type: string
+          example: Doe
         email:
           minLength: 1
           type: string
           format: email
-        id:
+          example: Johndoe123@gmail.com
+    UserResponseDTO:
+      required:
+      - email
+      - firstName
+      - lastName
+      - uid
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        uid:
           type: string
   securitySchemes:
     Authorization:
