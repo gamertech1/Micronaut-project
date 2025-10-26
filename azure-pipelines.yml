@@ -15,6 +15,7 @@ steps:
      chmod +x ./snyk
      mv ./snyk /usr/local/bin/
      npm install -g snyk-to-html 
+     chmod +x ./mvnw
      mkdir -p snyk-result
      snyk auth $(SYNK_TOKEN)
      snyk test --all-projects
