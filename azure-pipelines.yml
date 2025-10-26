@@ -16,9 +16,15 @@ steps:
      mv ./snyk /usr/local/bin/
      npm install -g snyk-to-html 
      chmod +x ./mvnw
-     mkdir -p snyk-result
+     mkdir -p result
      snyk auth $(SYNK_TOKEN)
-     snyk test --all-projects
+     snyk test --all-projects --json-file-output=result/oss.json
+     snyk code test --sarif-file-output=result/sast.sarif
+     snyk-to-html -o result/oss.html < result/oss.json
+     snyk-to-html -o result/sast.html < result/sast.sarif
   env:
     SYNK_TOKEN: $(SYNK_TOKEN)
   displayName: 'Security Scan'
+- publish: $(System.DefaultWorkingDirectory)/result
+  artifact: MyArtifact 
+
