@@ -31,4 +31,4 @@ steps:
      synk test --all-projects
      env:
       SYNC_TOKEN = $(SYNC_TOKEN)
-    didisplayName: 'Security Scan'
+     displayName: 'Security Scan'
