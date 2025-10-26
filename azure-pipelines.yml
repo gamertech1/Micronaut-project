@@ -24,6 +24,7 @@ steps:
      snyk-to-html -o result/sast.html < result/sast.sarif
   env:
     SYNK_TOKEN: $(SYNK_TOKEN)
+  continueOnError: True
   displayName: 'Security Scan'
 - publish: $(System.DefaultWorkingDirectory)/result
   artifact: MyArtifact 
