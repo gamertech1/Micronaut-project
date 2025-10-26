@@ -14,10 +14,10 @@ steps:
      curl --compressed https://downloads.snyk.io/cli/stable/snyk-linux -o snyk
      chmod +x ./snyk
      mv ./snyk /usr/local/bin/
-     sudo apt-get update && sudo apt-get install synk-to-html -y
-     mkdir -p sync-result
-     synk auth $(SYNC_TOKEN)
-     synk test --all-projects
-     env:
-      SYNC_TOKEN = $(SYNC_TOKEN)
-     displayName: 'Security Scan'
+     sudo apt-get update && sudo apt-get install snyk-to-html -y
+     mkdir -p snyk-result
+     snyk auth $(SYNC_TOKEN)
+     snyk test --all-projects
+  env:
+    SYNC_TOKEN: $(SYNC_TOKEN)
+  displayName: 'Security Scan'
